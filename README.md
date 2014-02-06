@@ -1,5 +1,7 @@
 ###这个lib使用AMD方式加载，基于Jquery开发。
 
+Demo: <http://www.xzfblog.com/demo/smooth-mousewheel/demo/index.html>
+
 	requirejs.config({
 		baseUrl: "../dev",
 		paths: {
