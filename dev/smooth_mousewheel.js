@@ -11,7 +11,7 @@
     }
 
     var SmoothMousewheel = function(options) {
-        this.$e = $(document.documentElement);
+        this.$e = $(document);
         this.$e[0]._inst = this;
         // this.options = options;
         this._init();
@@ -26,6 +26,7 @@
         tmpScroll : null,
         intervalId : 0,
         isLock : false,
+        inAnimate: false,
         _init: function() {
             var scope = this;
             this.scrollHeight = document.documentElement.scrollHeight - $window.height();
@@ -33,6 +34,12 @@
             this.tmpScroll = $("<div/>");
             $window.on("resize",function (){
                  scope.scrollHeight = document.documentElement.scrollHeight - $window.height();
+            });
+            $(document).on("scroll", function (e){
+                if(!scope.inAnimate){
+                    scope.currentTop = scope.targetTop = scope.$e.scrollTop();
+                    $window.trigger($.Event("SmoothScroll",{scrollTop: scope.currentTop }));
+                }
             });
         },
         _mousewheelEvent: function (e){
@@ -74,9 +81,12 @@
                     }
                     if (scope.currentTop >= 0) {
                         scope.$e.scrollTop(scope.currentTop);
+                        $window.trigger($.Event("SmoothScroll",{scrollTop: scope.currentTop }));
                     }
+                    scope.inAnimate = true;
                 } else {
                     scope.currentTop = scope.targetTop;
+                    scope.inAnimate = false;
                 }
                 window.cancelAnimationFrame(scope.intervalId);
                 scope.intervalId = window.requestAnimationFrame(scrollAnimation);
@@ -107,9 +117,9 @@
             if(!this.options || options){
                 this.options = $.extend({}, defaultsOption, typeof options == 'object' && options);
             }
-
             this.$e.on("mousewheel DOMMouseScroll", this._mousewheelEvent);
             this._animationLoop();
+            $window.trigger($.Event("SmoothScroll", {scrollTop: this.currentTop }));
         },
         disable: function (){
             this.$e.off("mousewheel DOMMouseScroll", this._mousewheelEvent);

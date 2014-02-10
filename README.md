@@ -65,3 +65,8 @@ Demo: <http://www.xzfblog.com/demo/smooth-mousewheel/demo/index.html>
 > duration : animate time
 > 
 > easing: jquery easing, default is "linear"
+
+##### Window event
+	$(window).on("SmoothScroll",function(e){
+		console.log(e.scrollTop)
+	});
