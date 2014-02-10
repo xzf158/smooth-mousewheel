@@ -1,5 +1,6 @@
 /**
  * @author Terry
+ * @email terry.xu@me.com
  * @date 2014/2/6
  */
 
@@ -33,12 +34,12 @@
             scope.targetTop = scope.currentTop = this.$e.scrollTop();
             this.tmpScroll = $("<div/>");
             $window.on("resize",function (){
-                 scope.scrollHeight = document.documentElement.scrollHeight - $window.height();
+                scope.scrollHeight = document.documentElement.scrollHeight - $window.height();
+                scope._forceUpdate();
             });
             $(document).on("scroll", function (e){
                 if(!scope.inAnimate){
-                    scope.currentTop = scope.targetTop = scope.$e.scrollTop();
-                    $window.trigger($.Event("SmoothScroll",{scrollTop: scope.currentTop }));
+                    scope._forceUpdate();
                 }
             });
         },
@@ -81,7 +82,7 @@
                     }
                     if (scope.currentTop >= 0) {
                         scope.$e.scrollTop(scope.currentTop);
-                        $window.trigger($.Event("SmoothScroll",{scrollTop: scope.currentTop }));
+                        scope._triggerEvent();
                     }
                     scope.inAnimate = true;
                 } else {
@@ -91,6 +92,13 @@
                 window.cancelAnimationFrame(scope.intervalId);
                 scope.intervalId = window.requestAnimationFrame(scrollAnimation);
             }
+        },
+        _forceUpdate:function (){
+            this.currentTop = this.targetTop = this.$e.scrollTop();
+            this._triggerEvent();
+        },
+        _triggerEvent:function (){
+             $window.trigger($.Event("SmoothScroll",{scrollTop: this.currentTop }));
         },
         scrollTo: function(top, duration, easing){
             var scope = this,
@@ -119,7 +127,7 @@
             }
             this.$e.on("mousewheel DOMMouseScroll", this._mousewheelEvent);
             this._animationLoop();
-            $window.trigger($.Event("SmoothScroll", {scrollTop: this.currentTop }));
+            this._triggerEvent();
         },
         disable: function (){
             this.$e.off("mousewheel DOMMouseScroll", this._mousewheelEvent);
