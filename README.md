@@ -62,7 +62,7 @@ Demo: <http://www.xzfblog.com/demo/smooth-mousewheel/demo/index.html>
 ##### SmoothMousewheel.scrollTo(top, [duration, easing]);
 > top: to Top value
 > 
-> duration : animate time
+> duration : animate time, default is 900
 > 
 > easing: jquery easing, default is "linear"
 
