@@ -31,7 +31,7 @@ Demo: <http://www.xzfblog.com/demo/smooth-mousewheel/demo/index.html>
 
 
 ####API:
-##### SmoothMousewheel.enable(); [options]
+##### SmoothMousewheel.enable([options]); 
 > 启用SmoothMousewheel
 
 	defaultOptions = {
@@ -59,7 +59,7 @@ Demo: <http://www.xzfblog.com/demo/smooth-mousewheel/demo/index.html>
 ##### SmoothMousewheel.distroy();
 > 销毁SmoothMousewheel
 
-##### SmoothMousewheel.scrollTo(1000); //top, [duration, easing]
+##### SmoothMousewheel.scrollTo(top, [duration, easing]);
 > top: to Top value
 > 
 > duration : animate time
