@@ -24,20 +24,32 @@ define(["jquery"], function() {
         intervalId: 0,
         isLock: false,
         inAnimate: false,
+        stageH : 0,
+        stageW : 0,
+        timeId : 0,
         _init: function() {
             var scope = this;
             this.scrollHeight = document.documentElement.scrollHeight - $window.height();
             scope.targetTop = scope.currentTop = this.$e.scrollTop();
             this.tmpScroll = $("<div/>");
-            $window.on("resize", function() {
-                scope.scrollHeight = document.documentElement.scrollHeight - $window.height();
-                scope._forceUpdate();
-            });
             $(document).on("scroll", function(e) {
                 if (!scope.inAnimate) {
                     scope._forceUpdate();
                 }
             });
+        },
+        _changePageResize: function() {
+            var scope = this;
+            if (scope.scrollHeight != document.documentElement.scrollHeight - scope.stageH || scope.stageW != $window.width() || scope.stageH != $window.height()) {
+                scope.stageW = $window.width();
+                scope.stageH = $window.height();
+                scope.scrollHeight = document.documentElement.scrollHeight - scope.stageH;
+                scope._forceUpdate();
+            }
+            clearTimeout(scope.timeId);
+            scope.timeId = setTimeout(function(){
+                scope._changePageResize();
+            }, 100);
         },
         _mousewheelEvent: function(e) {
             e.preventDefault();
@@ -127,6 +139,8 @@ define(["jquery"], function() {
             this.$e.on("mousewheel DOMMouseScroll", this._mousewheelEvent);
             this._animationLoop();
             this._triggerEvent();
+            clearTimeout(this.timeId);
+            this._changePageResize();
         },
         disable: function() {
             this.$e.off("mousewheel DOMMouseScroll", this._mousewheelEvent);
@@ -140,6 +154,7 @@ define(["jquery"], function() {
             this.isLock = false;
         },
         distroy: function() {
+            clearTimeout(this.timeId);
             this.disable();
             delete this.$e._inst;
             delete this.$e;
