@@ -107,7 +107,7 @@ define(["jquery"], function() {
             this._triggerEvent();
         },
         _triggerEvent: function() {
-            $window.trigger($.Event("SmoothScroll", {
+            $window.trigger($.Event(this.SMOOTH_SCROLL, {
                 scrollTop: this.currentTop
             }));
         },
@@ -161,7 +161,8 @@ define(["jquery"], function() {
             for (var i in this) {
                 delete this[i];
             }
-        }
+        },
+        SMOOTH_SCROLL : "SmoothScroll"
     };
     window.requestAnimFrame = (function() {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
